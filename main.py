@@ -48,12 +48,13 @@ class Drapeau:
                 indice = int(a) % nombreRayure   
                 self.image.putpixel((x,y),self.listColor[indice])
 
-    def genererDrapeauCercle(self):
+    def genererDrapeauCercle(self, rayureAutour):
         """
         Fonction qui créer un drapeau de taille longueur X hauteur,
         avec avec 2 couleurs sous forme de tuple en RGB.
         La première couleur sera le cercle et la deuxième couleur le fond, 
         comme sur le drapeau japonais.
+        Si on met à vrai rayureAutour, alors il y aura 30 rayures autour du cercle
         """
         assert len(self.listColor) >= 2
         color1 = self.listColor[0]
@@ -69,7 +70,18 @@ class Drapeau:
                 if d2 <= rayon**2:
                     self.image.putpixel((x,y),color1)
                 else:
-                    self.image.putpixel((x,y),color2)
+                    if not rayureAutour:
+                        self.image.putpixel((x,y),color2)
+                    else:
+                        # -pi <= theta < pi
+                        theta = math.atan2(point[0],point[1])
+                        #Nous voulons 30 rayures autour du cercle
+                        # 0 <= ((theta/pi + 1)/2)*30 < 30
+                        theta = (((theta/math.pi) + 1)/2)*30
+                        if int(theta) % 2 == 0:
+                            self.image.putpixel((x,y),color1)
+                        else:
+                            self.image.putpixel((x,y),color2)
 
     #Je vais modifier cette fonction plus tard
     #Elle comporte de nombreux problèmes
