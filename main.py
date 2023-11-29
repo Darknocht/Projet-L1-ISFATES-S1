@@ -94,7 +94,6 @@ class Drapeau:
         assert self.poly != None
         draw = ImageDraw.Draw(self.image)
     
-        # Remplir le triangle avec la couleur bleue
         # Dessiner l'étoile
         radius_outer = min(self.longueur, self.hauteur) // 4
         radius_inner = radius_outer // 2
