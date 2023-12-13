@@ -88,8 +88,8 @@ class Drapeau:
     def genererDrapeauTriangle(self, colorPoly):
         """
         Fonction qui créer un drapeau de taille longueur X hauteur,
-        avec 1 couleur sous forme de tuple en RGB.
-        La fonction crée un triangle sur le côté gauche
+        avec 1 couleur colorPoly sous forme de tuple en RGB.
+        La fonction crée un triangle sur le côté gauche.
         """
         assert len(self.listColor) >= 1
         draw = ImageDraw.Draw(self.image)
@@ -99,6 +99,16 @@ class Drapeau:
         draw.polygon(listCoorPoly, fill=colorPoly)
 
     def genererDrapeauEtoile(self, colorPoly):
+        """
+        Fonction qui créer un drapeau de taille longueur X hauteur,
+        avec 1 couleur colorPoly sous forme de tuple en RGB.
+        La fonction crée une étoile à 5 branches en la
+        plaçant au milieu.
+        Cette fonction est récursive en utilisant
+        genererDrapeauEtoileRec.
+        Cette fonction va être répéter 5 fois pour faire
+        les 5 branches.
+        """
         assert self.poly != None
         draw = ImageDraw.Draw(self.image)
     
