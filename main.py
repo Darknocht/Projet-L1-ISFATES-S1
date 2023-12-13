@@ -85,7 +85,7 @@ class Drapeau:
 
     #Je vais modifier cette fonction plus tard
     #Elle comporte de nombreux problèmes
-    def genererDrapeauTriangle(self):
+    def genererDrapeauTriangle(self, colorPoly):
         """
         Fonction qui créer un drapeau de taille longueur X hauteur,
         avec 1 couleur sous forme de tuple en RGB.
@@ -96,7 +96,7 @@ class Drapeau:
         listCoorPoly = [(0, 0), (self.longueur / 2, self.hauteur/2), (0, self.hauteur)]
     
         # Remplir le triangle avec la couleur
-        draw.polygon(listCoorPoly, fill=self.listColor[0])
+        draw.polygon(listCoorPoly, fill=colorPoly)
 
     def genererDrapeauEtoile(self, colorPoly):
         assert self.poly != None
