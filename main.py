@@ -85,22 +85,18 @@ class Drapeau:
 
     #Je vais modifier cette fonction plus tard
     #Elle comporte de nombreux problèmes
-    def genererDrapeauPolygone(self):
+    def genererDrapeauTriangle(self):
+        """
+        Fonction qui créer un drapeau de taille longueur X hauteur,
+        avec 1 couleur sous forme de tuple en RGB.
+        La fonction crée un triangle sur le côté gauche
+        """
+        assert len(self.listColor) >= 1
         draw = ImageDraw.Draw(self.image)
         listCoorPoly = [(0, 0), (self.longueur / 2, self.hauteur/2), (0, self.hauteur)]
     
-        colorPoly = self.listColor[(len(self.listColor)-1)]
-        listOtherColor = self.listColor[:-1]
-        nombreRayure = len(listOtherColor)
-    
-        for x in range(self.longueur):
-            for y in range(self.hauteur):
-                a = (y / self.hauteur) * nombreRayure
-                indice = int(a) % nombreRayure   
-                self.image.putpixel((x, y), listOtherColor[indice])
-    
-        # Remplir le triangle avec la dernière couleur
-        draw.polygon(listCoorPoly, fill=colorPoly)
+        # Remplir le triangle avec la couleur
+        draw.polygon(listCoorPoly, fill=self.listColor[0])
 
     def genererDrapeauEtoile(self, colorPoly):
         assert self.poly != None
