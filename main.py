@@ -2,6 +2,13 @@ from flask import Flask
 import math
 from PIL import Image, ImageDraw
 
+def verifier_formulaire(formulaire):
+    for champ, valeur in formulaire.items():
+        if valeur is None or valeur == '':
+            return False
+    return True
+
+
 class Drapeau:
     def __init__(self, longueur, hauteur, listColor, poly = None, name="drapeau"):
         self.name = name
