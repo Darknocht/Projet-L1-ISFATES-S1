@@ -8,6 +8,30 @@ def verifier_formulaire(formulaire):
             return False
     return True
 
+def hex_to_rgb(hex_color):
+    hex_color = hex_color.lstrip('#')
+
+    if len(hex_color) == 3:
+        hex_color = ''.join([char * 2 for char in hex_color])
+
+    def convert_hex_to_rgb(hex_value):
+        if not hex_value:
+            return ()
+        else:
+            return (int(hex_value[0:2], 16),) + convert_hex_to_rgb(hex_value[2:])
+
+    rgb_color = convert_hex_to_rgb(hex_color)
+
+    return rgb_color
+
+
+# Exemple d'utilisation
+hex_color = '#1a2b3c'
+rgb_color = hex_to_rgb(hex_color)
+
+print(f"Couleur hexadécimale : {hex_color}")
+print(f"Couleur RGB : {rgb_color}")
+
 
 class Drapeau:
     def __init__(self, longueur, hauteur, listColor, poly = None, name="drapeau"):
