@@ -2,6 +2,22 @@ from flask import Flask
 import math
 from PIL import Image, ImageDraw
 
+
+
+@app.route("/")
+def home():
+    return render_template("isfates.html")
+
+
+@app.route("/traitement", methods=["POST"])
+def traitement():
+    couleur1 = request.form["couleur1"]
+    return f"donnees : {couleur1}"
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
 def verifier_formulaire(formulaire):
     for champ, valeur in formulaire.items():
         if valeur is None or valeur == '':
