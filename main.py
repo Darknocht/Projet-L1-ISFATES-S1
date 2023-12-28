@@ -10,10 +10,6 @@ def home():
 
 
 @app.route("/", methods=["POST"])
-def traitement():
-    couleur1 = request.form["couleur1"]
-    return f"donnees : {couleur1}"
-
 
 if __name__ == "__main__":
     app.run(debug=True)
