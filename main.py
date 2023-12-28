@@ -19,10 +19,47 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 def verifier_formulaire(formulaire):
-    for champ, valeur in formulaire.items():
-        if valeur is None or valeur == '':
-            return False
-    return True
+    document.addEventListener("DOMContentLoaded", function () {
+    var form = document.querySelector("form");
+
+    form.addEventListener("submit", function (event) {
+        var couleur1 = document.getElementById("couleur1").value;
+        var couleur2 = document.getElementById("couleur2").value;
+        var couleur3 = document.getElementById("couleur3").value;
+        var forme = document.getElementById("forme").value;
+
+        // Validation de la couleur1
+        if (!isValidColor(couleur1)) {
+            alert("Entrez une couleur valide pour Couleur 1.");
+            event.preventDefault();
+        }
+
+        // Validation de la couleur2
+        if (!isValidColor(couleur2)) {
+            alert("Entrez une couleur valide pour Couleur 2.");
+            event.preventDefault();
+        }
+
+        // Validation de la couleur3
+        if (!isValidColor(couleur3)) {
+            alert("Entrez une couleur valide pour Couleur 3.");
+            event.preventDefault();
+        }
+
+        // Validation de la forme
+        var formesPossibles = ["carré", "cercle", "triangle"];
+        if (formesPossibles.indexOf(forme) === -1) {
+            alert("Veuillez sélectionner une forme valide.");
+            event.preventDefault();
+        }
+    });
+
+def isValidColor(color) {
+        // Utilise une expression régulière pour valider la couleur (format hexadécimal)
+        var colorRegex = /^#[0-9A-Fa-f]{6}$/;
+        return colorRegex.test(color);
+    }
+});
 
 def hex_to_rgb(hex_color):
     hex_color = hex_color.lstrip('#')
