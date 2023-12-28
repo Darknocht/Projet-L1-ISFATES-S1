@@ -9,7 +9,7 @@ def home():
     return render_template("isfates.html")
 
 
-@app.route("/traitement", methods=["POST"])
+@app.route("/", methods=["POST"])
 def traitement():
     couleur1 = request.form["couleur1"]
     return f"donnees : {couleur1}"
@@ -18,48 +18,36 @@ def traitement():
 if __name__ == "__main__":
     app.run(debug=True)
 
-def verifier_formulaire(formulaire):
-    document.addEventListener("DOMContentLoaded", function () {
-    var form = document.querySelector("form");
+def verifier_formulaire():
+    if request.method == 'POST':
+        couleur1 = request.form['couleur1']
+        couleur2 = request.form['couleur2']
+        couleur3 = request.form['couleur3']
+        forme = request.form['forme']
 
-    form.addEventListener("submit", function (event) {
-        var couleur1 = document.getElementById("couleur1").value;
-        var couleur2 = document.getElementById("couleur2").value;
-        var couleur3 = document.getElementById("couleur3").value;
-        var forme = document.getElementById("forme").value;
+        # Validation de la couleur1
+        if not is_valid_color(couleur1):
+            return "Entrez une couleur valide pour Couleur 1."
 
-        // Validation de la couleur1
-        if (!isValidColor(couleur1)) {
-            alert("Entrez une couleur valide pour Couleur 1.");
-            event.preventDefault();
-        }
+        # Validation de la couleur2
+        if not is_valid_color(couleur2):
+            return "Entrez une couleur valide pour Couleur 2."
 
-        // Validation de la couleur2
-        if (!isValidColor(couleur2)) {
-            alert("Entrez une couleur valide pour Couleur 2.");
-            event.preventDefault();
-        }
+        # Validation de la couleur3
+        if not is_valid_color(couleur3):
+            return "Entrez une couleur valide pour Couleur 3."
 
-        // Validation de la couleur3
-        if (!isValidColor(couleur3)) {
-            alert("Entrez une couleur valide pour Couleur 3.");
-            event.preventDefault();
-        }
+        # Validation de la forme
+        formes_drapeau = ["carré", "cercle", "triangle"]
+        if forme not in formes_drapeau:
+            return "Sélectionnez une forme valide."
 
-        // Validation de la forme
-        var formesPossibles = ["carré", "cercle", "triangle"];
-        if (formesPossibles.indexOf(forme) === -1) {
-            alert("Veuillez sélectionner une forme valide.");
-            event.preventDefault();
-        }
-    });
+    return render_template('isfates.html')
 
-def isValidColor(color) {
-        // Utilise une expression régulière pour valider la couleur (format hexadécimal)
-        var colorRegex = /^#[0-9A-Fa-f]{6}$/;
-        return colorRegex.test(color);
-    }
-});
+def is_valid_color(color):
+    # Utilise une expression régulière pour valider la couleur (format hexadécimal)
+    color_regex = "^#[0-9A-Fa-f]{6}$"
+    return re.match(color_regex, color)
 
 def hex_to_rgb(hex_color):
     hex_color = hex_color.lstrip('#')
