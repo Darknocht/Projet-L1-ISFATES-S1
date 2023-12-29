@@ -19,6 +19,12 @@ def initialisation():
 
 @app.route('/traitement/', methods=["POST"])
 def verification():
+    """
+    Cette fonction vérifie si les données reçues du
+    formulaire sont correctes
+    Si oui, elle renvoie la page HTML sans erreur
+    Si non, elle renvoie la page HTML avec une erreur
+    """
     if request.method == 'POST':
         couleur1 = request.form['couleur1']
         couleur2 = request.form['couleur2']
