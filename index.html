@@ -7,6 +7,7 @@
 <body>
     <form action="/traitement" method="post" >
     <h1>Créateur de Drapeau</h1>
+        <p>{{erreur}}</p>
         <label for="couleur1">Choisissez la Couleur 1 :</label>
         <input type="color" id="couleur1" name="couleur1" required>
         <br>
@@ -16,9 +17,6 @@
         <label for="couleur3">Choisissez la Couleur 3 (optionnelle) :</label>
         <input type="color" id="couleur3" name="couleur3">
         <br>
-
-
-        
         <label for="forme">Choisissez la Forme :</label>
         <select id="forme" name="forme" required>
             <option value="carré">Carré</option>
