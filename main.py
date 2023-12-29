@@ -46,14 +46,28 @@ def is_valid_color(color):
     return re.match(color_regex, color)
 
 def hex_to_rgb(hex_color):
+    """
+    Fonction qui convertit une couleur
+    en code hexadécimal en code RGB sous la forme
+    d'un tuple.
+    La fonction est récursif en utilisant 
+    convert_hex_to_rgb.
+    """
+    #On retire le caractère # dans la chaîne de caractères
     hex_color = hex_color.lstrip('#')
 
+    #On vérifie si la couleur n'a que 3 caractères
+    #Si oui, on ajoute le même chiffre à côté, A --> AA
     if len(hex_color) == 3:
         hex_color = ''.join([char * 2 for char in hex_color])
 
+    #Utilisation d'une fonction récursif pour convertir le code
     def convert_hex_to_rgb(hex_value):
+        #Si la chaîne est vide, on renvoie le tuple
         if not hex_value:
             return ()
+        #Sinon, on convertie les 2 premiers bits puis on les retire
+        #en réutilisant la même fonction
         else:
             return (int(hex_value[0:2], 16),) + convert_hex_to_rgb(hex_value[2:])
 
