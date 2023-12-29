@@ -2,18 +2,18 @@ from flask import Flask, request, render_template, redirect, url_for
 import math
 from PIL import Image, ImageDraw
 
-
+#Initialisation du serveur
+app = Flask('app')
 
 @app.route("/")
-def home():
+def initialisation():
+    """
+    Initialisation de la page HTML index.html
+    Cette fonction permet de renvoyer cette page à l’utilisateur
+    """
     return render_template("isfates.html")
 
-
-@app.route("/", methods=["POST"])
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
+@app.route('/traitement/', methods=["POST"])
 def verifier_formulaire():
     if request.method == 'POST':
         couleur1 = request.form['couleur1']
@@ -74,15 +74,6 @@ def hex_to_rgb(hex_color):
     rgb_color = convert_hex_to_rgb(hex_color)
 
     return rgb_color
-
-
-# Exemple d'utilisation
-hex_color = '#1a2b3c'
-rgb_color = hex_to_rgb(hex_color)
-
-print(f"Couleur hexadécimale : {hex_color}")
-print(f"Couleur RGB : {rgb_color}")
-
 
 class Drapeau:
     def __init__(self, longueur, hauteur, listColor, poly = None, name="drapeau"):
@@ -224,16 +215,5 @@ class Drapeau:
     
         genererDrapeauEtoileRec(self, colorPoly, radius_outer, radius_inner)
     
-
-#Le png est sauvegardé dans les fichiers à gauche
-#Je vais prochainement modifier mes fonctions, pour quelles soient plus personnalisable,
-#Plus optimisé, en utilisant lambda, et aussi utiliser la récursivité
-print("Veuillez patienter...")
-color1 = (0, 0, 0) #noir
-color2 = (255, 0, 0) #rouge
-color3 = (255, 204, 0) #jaune-doré
-MonDrapeau = Drapeau(500, 300, [color2], (500/2, 300/2))
-MonDrapeau.genererDrapeauVertical()
-MonDrapeau.genererDrapeauEtoile(color3)
-print(MonDrapeau)
-print("Drapeau crée")
+#Configuration du port pour le localhost
+app.run(host='0.0.0.0', port=8080)
