@@ -5,16 +5,20 @@ from PIL import Image, ImageDraw
 #Initialisation du serveur
 app = Flask('app')
 
+#Initialisation d'un message d'erreur
+#Il n'y a pas d'erreur donc le message est vide
+erreur = ""
+
 @app.route("/")
 def initialisation():
     """
     Initialisation de la page HTML index.html
     Cette fonction permet de renvoyer cette page à l’utilisateur
     """
-    return render_template("isfates.html")
+    return render_template("index.html", erreur=erreur)
 
 @app.route('/traitement/', methods=["POST"])
-def verifier_formulaire():
+def verification():
     if request.method == 'POST':
         couleur1 = request.form['couleur1']
         couleur2 = request.form['couleur2']
@@ -23,22 +27,26 @@ def verifier_formulaire():
 
         # Validation de la couleur1
         if not is_valid_color(couleur1):
-            return "Entrez une couleur valide pour Couleur 1."
+            erreur = "Entrez une couleur valide pour Couleur 1."
+            return render_template("index.html", erreur=erreur)
 
         # Validation de la couleur2
         if not is_valid_color(couleur2):
-            return "Entrez une couleur valide pour Couleur 2."
+            erreur = "Entrez une couleur valide pour Couleur 2."
+            return render_template("index.html", erreur=erreur)
 
         # Validation de la couleur3
         if not is_valid_color(couleur3):
-            return "Entrez une couleur valide pour Couleur 3."
+            erreur = "Entrez une couleur valide pour Couleur 3."
+            return render_template("index.html", erreur=erreur)
 
         # Validation de la forme
         formes_drapeau = ["carré", "cercle", "triangle"]
         if forme not in formes_drapeau:
-            return "Sélectionnez une forme valide."
+            erreur = "Sélectionnez une forme valide."
+            return render_template("index.html", erreur=erreur)
 
-    return render_template('isfates.html')
+    return render_template('index.html', erreur=erreur)
 
 def is_valid_color(color):
     # Utilise une expression régulière pour valider la couleur (format hexadécimal)
