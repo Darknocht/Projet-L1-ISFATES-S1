@@ -228,6 +228,47 @@ class Drapeau:
                                         radius_outer, radius_inner, i+1)
     
         genererDrapeauEtoileRec(self, colorPoly, radius_outer, radius_inner)
+
+    def genererDrapeauCroissant(self, colorPoly):
+        """
+        Fonction qui créer un drapeau de taille longueur X hauteur,
+        avec 1 couleur colorPoly sous forme de tuple en RGB.
+        La fonction crée un croissant en la
+        plaçant au milieu.
+        Nous utiliserons la fonction appartientCercle qui renvoie
+        vrai si un point appartient à un cercle, faux sinon.
+        Nous utiliserons aussi la fonction appartientCroissant qui
+        renvoie vrai si un point appartient à un croissant, faux sinon.
+        """
+        
+        def appartientCercle(xP, yP, xC, yC, r):
+            #Nous réutiliserons la formule si un P appartient à un cercle
+            #sous la forme d'une fonction arithmétique
+            formule = lambda x1, y1, x2, y2: (x2 - x1) ** 2 + (y2 - y1) ** 2
+            return formule(xP, yP, xC, yC) <= r ** 2
+
+        def appartientCroissant(xP, yP, xC1, yC1, xC2, yC2, r):
+            #On détermine si le point P appartient au croissant
+            cercle1 = appartientCercle(xP, yP, xC1, yC1, r)
+            cercle2 = appartientCercle(xP, yP, xC2, yC2, r)
+            #Si le point appartient au premier cercle et pas au deuxième cercle
+            #alors le point P appartient au croissant
+            if cercle1 and not cercle2:
+                return True
+            else:
+                return False
+
+        #Nous allons déterminer les coordonnées de 2 cercles avec un rayon longueur/11
+        rayon = self.longueur/11
+        x1 = self.longueur/2
+        y1 = self.hauteur/2
+        x2 = self.longueur/2 + math.sin(math.pi/2)*(rayon-30)
+        y2 = self.hauteur/2 + math.cos(math.pi/2)*(rayon-30)
+        #Puis on vérifie chaques pixels pour savoir si ils appartiennent à un croissant
+        for x in range(self.longueur):
+            for y in range(self.hauteur):
+                if appartientCroissant(x, y, x1, y1, x2, y2, rayon):
+                    self.image.putpixel((x, y), colorPoly)
     
 #Configuration du port pour le localhost
 app.run(host='0.0.0.0', port=8080)
