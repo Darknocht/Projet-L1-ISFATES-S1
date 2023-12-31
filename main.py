@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for 
-import math
+import math import re
 from PIL import Image, ImageDraw
 
 #Initialisation du serveur
