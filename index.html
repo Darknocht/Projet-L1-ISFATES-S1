@@ -7,24 +7,58 @@
 <body>
     <form action="/traitement" method="post" >
     <h1>Créateur de Drapeau</h1>
-        <p>{{erreur}}</p>
-        <label for="couleur1">Choisissez la Couleur 1 :</label>
-        <input type="color" id="couleur1" name="couleur1" required>
+        <label for="forme">Choisissez la Forme&nbsp;:</label>
+        <select id="forme" name="forme" size="1">
+            <option value="vertical">Rayures verticales</option>
+            <option value="horizontal">Rayures horizontales</option>
+            <option value="cercle">Cercle (Minimum 2 couleurs)</option>
+        </select>
         <br>
-        <label for="couleur2">Choisissez la Couleur 2 (optionnelle) :</label>
+        <label for="rayure">Si Cercle, avec ou sans rayure autour du cercle&nbsp;?</label>
+        <select id="rayure" name="rayure" size="1">
+            <option value="avec">Avec</option>
+            <option value="sans">Sans</option>
+        </select>
+        <br>
+        <label for="nbCouleur">Choisissez le nombre de couleur&nbsp;:</label>
+        <select id="nbCouleur" name="nbCouleur" size="1">
+            <option value="nb1">1</option>
+            <option value="nb2">2</option>
+            <option value="nb3">3</option>
+        </select>
+        <br>
+        <label for="longueur">Choisissez la longueur&nbsp; en pixel:</label>
+        <input type="number" id="longueur" name="longueur" min="50" max="800" value="400"/>
+        <br>
+        <label for="hauteur">Choisissez la hauteur&nbsp; en pixel:</label>
+        <input type="number" id="hauteur" name="hauteur" min="50" max="800" value="300"/>
+        <br>
+        <label for="couleur1">Choisissez la Couleur 1&nbsp;:</label>
+        <input type="color" id="couleur1" name="couleur1">
+        <br>
+        <label for="couleur2">Choisissez la Couleur 2&nbsp;:</label>
         <input type="color" id="couleur2" name="couleur2">
         <br>
-        <label for="couleur3">Choisissez la Couleur 3 (optionnelle) :</label>
+        <label for="couleur3">Choisissez la Couleur 3&nbsp;:</label>
         <input type="color" id="couleur3" name="couleur3">
         <br>
-        <label for="forme">Choisissez la Forme :</label>
-        <select id="forme" name="forme" required>
-            <option value="carré">Carré</option>
-            <option value="cercle">Cercle</option>
+        <label for="objet">Quel objet voulez-vous&nbsp;?</label>
+        <select id="objet" name="objet" size="1">
+            <option value="etoile">Etoile</option>
+            <option value="croissant">Croissant</option>
             <option value="triangle">Triangle</option>
+            <option value="rien">Rien</option>
         </select>
-        
+        <br>
+        <label for="couleurObjet">Choisissez la Couleur de l'objet&nbsp;:</label>
+        <input type="color" id="couleurObjet" name="couleurObjet">
+        <br/>
         <input type="submit" value="Générer le Drapeau">
     </form>
+    {% if afficherImg %}
+        <img src="{{url_for('static', filename='drapeau.png')}}" alt="Drapeau généré"/>
+        <br/>
+        <a href="{{url_for('static', filename='drapeau.png')}}" download><button>Télécharger le Drapeau</button></a>
+    {% endif %}
 </body>
 </html>
