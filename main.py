@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for 
-import math import re
+import math 
+import re
 from PIL import Image, ImageDraw
 
 #Initialisation du serveur
@@ -8,6 +9,9 @@ app = Flask('app')
 #Initialisation d'un message d'erreur
 #Il n'y a pas d'erreur donc le message est vide
 erreur = ""
+
+#Pour l'instant, on affiche pas l'image
+afficherImg = False
 
 @app.route("/")
 def initialisation():
@@ -25,34 +29,91 @@ def verification():
     Si oui, elle renvoie la page HTML sans erreur
     Si non, elle renvoie la page HTML avec une erreur
     """
-    if request.method == 'POST':
-        couleur1 = request.form['couleur1']
-        couleur2 = request.form['couleur2']
-        couleur3 = request.form['couleur3']
-        forme = request.form['forme']
+    #Récupération des données du formulaire
+    forme = request.form["forme"]
+    rayure = request.form["rayure"]
+    nbCouleur = request.form["nbCouleur"]
+    longueur = request.form["longueur"]
+    hauteur = request.form["hauteur"]
+    couleur1 = request.form["couleur1"]
+    couleur2 = request.form["couleur2"]
+    couleur3 = request.form["couleur3"]
+    objet = request.form["objet"]
+    couleurObjet = request.form["couleurObjet"]
 
-        # Validation de la couleur1
+    #On suppose qu'on affiche pas l'image
+    #Tant que tous les tests ne sont pas fait
+    afficherImg = False
+
+    #Erreur dans la saisie de la forme
+    if not forme :
+        erreur = "Entrez une forme valide."
+        return render_template("index.html", erreur=erreur, afficherImg=afficherImg)
+
+    #Erreur dans la saisie de la rayure
+    if not rayure and forme == "cercle":
+        erreur = "Vous avez choisi un cercle, mais avec ou sans rayure ?"
+        return render_template("index.html", erreur=erreur, afficherImg=afficherImg)
+
+    #Erreur dans la saisie du nombre de couleur
+    if not nbCouleur:
+        erreur = "Entrez un nombre de couleur valide."
+        return render_template("index.html", erreur=erreur, afficherImg=afficherImg)
+
+    #Erreur dans la saisie de la longueur
+    if not longueur:
+        erreur = "Entrez une longueur valide."
+        return render_template("index.html", erreur=erreur, afficherImg=afficherImg)
+
+    #Erreur dans la saisie de la hauteur
+    if not hauteur:
+        erreur = "Entrez une hauteur valide."
+        return render_template("index.html", erreur=erreur, afficherImg=afficherImg)
+
+    #Erreur dans la saisie de l'objet
+    if not objet:
+        erreur = "Entrez un objet valide."
+        return render_template("index.html", erreur=erreur, afficherImg=afficherImg)
+
+    #Erreur dans la saisie de la couleur de l'objet
+    if not couleurObjet and objet != "rien":
+        erreur = "Entrez une couleur valide pour l'objet."
+        return render_template("index.html", erreur=erreur, afficherImg=afficherImg)
+
+    #Erreur dans la saisie de la couleur1
+    if not couleur1:
+        erreur = "Entrez une couleur 1 valide."
+        return render_template("index.html", erreur=erreur, afficherImg=afficherImg)
+
+    #Erreur dans la saisie de la couleur2
+    if not couleur2 and (nbCouleur == "nb2" or nbCouleur == "nb3"):
+        erreur = "Entrez une couleur 2 valide."
+        return render_template("index.html", erreur=erreur, afficherImg=afficherImg)
+
+    #Erreur dans la saisie de la couleur1
+    if not couleur2 and nbCouleur == "nb3":
+        erreur = "Entrez une couleur 3 valide."
+        return render_template("index.html", erreur=erreur, afficherImg=afficherImg)
+
+    #Vérification si la/les couleurs transmises sont valides
+    if nbCouleur == "nb1":
         if not is_valid_color(couleur1):
-            erreur = "Entrez une couleur valide pour Couleur 1."
-            return render_template("index.html", erreur=erreur)
+            erreur = "Entrez une couleur 1 valide."
+            return render_template("index.html", erreur=erreur, afficherImg=afficherImg)
+    elif nbCouleur == "nb2":
+        if not is_valid_color(couleur1) or not is_valid_color(couleur2):
+            erreur = "Entrez une couleur 1 et une couleur 2 valides."
+            return render_template("index.html", erreur=erreur, afficherImg=afficherImg)
+    else:
+        if not is_valid_color(couleur1) or not is_valid_color(couleur2) \
+        or not is_valid_color(couleur3):
+            erreur = "Entrez une couleur 1, une couleur 2 et une couleur 3 valides."
+            return render_template("index.html", erreur=erreur, afficherImg=afficherImg)
 
-        # Validation de la couleur2
-        if not is_valid_color(couleur2):
-            erreur = "Entrez une couleur valide pour Couleur 2."
-            return render_template("index.html", erreur=erreur)
-
-        # Validation de la couleur3
-        if not is_valid_color(couleur3):
-            erreur = "Entrez une couleur valide pour Couleur 3."
-            return render_template("index.html", erreur=erreur)
-
-        # Validation de la forme
-        formes_drapeau = ["carré", "cercle", "triangle"]
-        if forme not in formes_drapeau:
-            erreur = "Sélectionnez une forme valide."
-            return render_template("index.html", erreur=erreur)
-
-    return render_template('index.html', erreur=erreur)
+    erreur = ""
+    afficherImg = True
+    creation()
+    return render_template('index.html', erreur=erreur, afficherImg=afficherImg)
 
 def is_valid_color(color):
     # Utilise une expression régulière pour valider la couleur (format hexadécimal)
@@ -88,6 +149,64 @@ def hex_to_rgb(hex_color):
     rgb_color = convert_hex_to_rgb(hex_color)
 
     return rgb_color
+
+def creation():
+    """
+    Cette fonction permet de créer un fichier image
+    en fonction des données saisies par l'utilisateur
+    """
+    #Récupération des données du formulaire
+    forme = request.form["forme"]
+    rayure = request.form["rayure"]
+    nbCouleur = request.form["nbCouleur"]
+    longueur = request.form["longueur"]
+    hauteur = request.form["hauteur"]
+    couleur1 = request.form["couleur1"]
+    couleur2 = request.form["couleur2"]
+    couleur3 = request.form["couleur3"]
+    objet = request.form["objet"]
+    couleurObjet = request.form["couleurObjet"]
+
+    #Création de la liste de couleurs
+    if nbCouleur == "nb1" and forme != "cercle":
+        listColor = [hex_to_rgb(couleur1)]
+    elif nbCouleur == "nb2" or forme == "cercle":
+        listColor = [hex_to_rgb(couleur1), hex_to_rgb(couleur2)]
+    else:
+        listColor = [hex_to_rgb(couleur1), hex_to_rgb(couleur2), hex_to_rgb(couleur3)]
+        
+    #Utilisation de la classe Drapeau pour créer l'image
+    monDrapeau = Drapeau(int(longueur), int(hauteur),\
+                         listColor, (int(longueur)/2, int(hauteur)/2))
+
+    #Drapeau vertical
+    if forme == "vertical":
+        monDrapeau.genererDrapeauVertical()
+    #Drapeau horizontal
+    elif forme == "horizontal":
+        monDrapeau.genererDrapeauHorizontal()
+    #Drapeau avec un cercle
+    else:
+        if rayure == "avec":
+            rayure = True
+        else:
+            rayure = False
+        monDrapeau.genererDrapeauCercle(rayure)
+
+    #Drapeau avec un objet
+    couleurObjet = hex_to_rgb(couleurObjet)
+    #Ajout d'une étoile
+    if objet == "etoile":
+        monDrapeau.genererDrapeauEtoile(couleurObjet)
+    #Ajout d'un croissant
+    elif objet == "croissant":
+        monDrapeau.genererDrapeauCroissant(couleurObjet)
+    #Ajout d'un triangle
+    elif objet == "triangle":
+        monDrapeau.genererDrapeauTriangle(couleurObjet)
+
+    #Génération de l'image
+    print(monDrapeau)
 
 class Drapeau:
     def __init__(self, longueur, hauteur, listColor, poly = None, name="drapeau"):
