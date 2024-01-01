@@ -218,7 +218,7 @@ class Drapeau:
         self.image = Image.new('RGB',(longueur,hauteur))
 
     def __repr__(self):
-        self.image.save(self.name + ".png")
+        self.image.save("static/" + self.name + ".png")
         return "<" + str(self.longueur) + "*" + str(self.hauteur) + " with colors" \
         + str(self.listColor) + ">"
 
