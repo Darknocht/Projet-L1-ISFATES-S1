@@ -116,6 +116,12 @@ def verification():
     return render_template('index.html', erreur=erreur, afficherImg=afficherImg)
 
 def is_valid_color(color):
+    """
+    Cette fonction vérifie si la couleur en
+    hexadécimal est correct
+    Si c’est vrai, elle renvoie vraie
+    Sinon, elle renvoie faux
+    """
     # Utilise une expression régulière pour valider la couleur (format hexadécimal)
     color_regex = "^#[0-9A-Fa-f]{6}$"
     return re.match(color_regex, color)
